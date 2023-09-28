@@ -1,7 +1,8 @@
 <template>
     <div class="row__title">
         <h2>Дети (макс. 5)</h2>
-        <custom-button class="add__children" v-if="LocalChildrenArray.length < 5" @click="addNewChildrenClick(itemObject)"><b>+</b>Добавить
+        <custom-button class="add__children" v-if="LocalChildrenArray.length < 5"
+            @click="addNewChildrenClick(itemObject)"><b>+</b>Добавить
             ребенка</custom-button>
     </div>
     <form class="form__parent">
@@ -18,7 +19,10 @@
             </div>
             <p @click="deleteChildren(item)">Удалить</p>
         </div>
-        <custom-button type="button" v-if="LocalChildrenArray.length > 0" class="save__data" @click="clickAddStorage">Сохранить</custom-button>
+        <custom-button type="button" v-if="LocalChildrenArray.length > 0" class="save__data" @click="() => {
+            clickAddStorage();
+            addToStorageParent();
+        }">Сохранить</custom-button>
     </form>
 </template>
 
@@ -29,9 +33,10 @@ export default {
         return {};
     },
     methods: {
-        clickAddStorage(){
-            this.addToStorage()
-            this.setSuccessAddedData(true)
+        clickAddStorage() {
+                this.addToStorageChildren();
+                this.addToStorageParent();
+                this.setSuccessAddedData(true)
         },
         setName(e, item) {
             item.nameText = e;
@@ -53,13 +58,16 @@ export default {
             setItemChildren: 'formChildren/setItemChildren',
             addNewChildren: 'formChildren/addNewChildren',
             deleteChildren: 'formChildren/deleteChildren',
-            addToStorage: 'formChildren/addToStorage',
-            setSuccessAddedData:'formChildren/setSuccessAddedData'
+            addToStorageChildren: 'formChildren/addToStorage',
+            addToStorageParent: 'formParent/addToStorage',
+            setSuccessAddedData: 'formChildren/setSuccessAddedData'
         }),
     },
     computed: {
         ...mapState({
             LocalChildrenArray: state => state.formChildren.LocalChildrenArray,
+            nameParent: state => state.formParent.nameParent,
+            ageParent: state => state.formParent.ageParent
         })
     }
 }
@@ -112,6 +120,7 @@ export default {
 .add__children {
     padding: 10px 20px;
     display: flex;
+    cursor: pointer;
     column-gap: 10px;
     align-items: center;
     color: #01A7FD;
@@ -124,7 +133,7 @@ export default {
     font-size: 24px;
 }
 
-.save__data{
+.save__data {
     max-width: 118px;
     width: 100%;
     background: #01A7FD;

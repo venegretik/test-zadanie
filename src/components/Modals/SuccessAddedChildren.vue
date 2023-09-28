@@ -64,5 +64,6 @@ export default {
     right: 10px;
     font-size: 28px;
     top: 10px;
+    cursor: pointer;
 }
 </style>

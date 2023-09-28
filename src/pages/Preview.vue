@@ -28,8 +28,7 @@ export default {
         ...mapState({
             nameParent: state => state.formParent.nameParent,
             ageParent: state => state.formParent.ageParent,
-            MainChildrenArray: state => state.formChildren.MainChildrenArray,
-            Errors: state => state.formParent.Errors
+            MainChildrenArray: state => state.formChildren.MainChildrenArray
         })
     }
 }

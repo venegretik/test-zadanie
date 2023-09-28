@@ -3,13 +3,11 @@
     <form action="" class="form__parent">
         <div class="input__item">
             <label for="input_name">Имя</label>
-            <custom-input type="text" id="input_name" @update:model-value="($event) => nameChange($event)" :modelValue="nameParent" placeholder="Ваше Имя"></custom-input>
-            <p v-for="item in Errors.nameError" :key="item">{{ item }}</p>
+            <custom-input type="text" id="input_name" @update:model-value="($event) => nameChange($event)" :modelValue="localName" placeholder="Ваше Имя"></custom-input>
         </div>
         <div class="input__item">
             <label for="input_name">Возраст</label>
-            <custom-input type="number" id="input_name" @update:model-value="($event) => ageChange($event)" :modelValue="ageParent" placeholder="Ваш возраст"></custom-input>
-            <p v-for="item in Errors.ageError" :key="item">{{ item }}</p>
+            <custom-input type="number" id="input_name" @update:model-value="($event) => ageChange($event)" :modelValue="localAge" placeholder="Ваш возраст"></custom-input>
         </div>
     </form>
 </template>
@@ -17,39 +15,26 @@
 <script>
 import { mapState, mapMutations } from 'vuex';
 export default {
+    data(){
+        return{
+        }
+    },
     methods:{
         nameChange(e){
-            let errorObj = {errorItem:'nameError',errorValue:'Имя слишком короткое'}
-            if(e.length < 3){
-                this.addErrorParent(errorObj)
-            }
-            else{
-                this.removeErrorParent(errorObj);
-            }
-            this.setNameParent(e)
+            this.setLocalNameParent(e)
         },
         ageChange(e){
-            let errorObj = {errorItem:'ageError',errorValue:'Возвраст слишком большой'}
-            if(e.length > 2){
-                this.addErrorParent(errorObj)
-            }
-            else{
-                this.removeErrorParent(errorObj);
-            }
-            this.setAgeParent(e)
+            this.setLocalAgeParent(e)
         },
         ...mapMutations({
-            setNameParent:'formParent/setNameParent',
-            setAgeParent:'formParent/setAgeParent',
-            addErrorParent:'formParent/addErrorParent',
-            removeErrorParent:'formParent/removeErrorParent'
+            setLocalNameParent:'formParent/setLocalNameParent',
+            setLocalAgeParent:'formParent/setLocalAgeParent'
         })
     },
-    computed: {
+    computed:{
         ...mapState({
-            nameParent: state => state.formParent.nameParent,
-            ageParent: state => state.formParent.ageParent,
-            Errors: state => state.formParent.Errors
+            localName: state => state.formParent.localName,
+            localAge: state => state.formParent.localAge
         })
     }
 }

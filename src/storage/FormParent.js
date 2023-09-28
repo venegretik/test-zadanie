@@ -1,33 +1,27 @@
 export const formParent = {
     state: () => ({
-        nameParent:'',
-        ageParent:'',
-        Errors:{
-            nameError:[],
-            ageError:[]
-        }
+        nameParent: '',
+        ageParent: '',
+        localName:'',
+        localAge:''
     }),
     getter: {
 
     },
-    mutations:{
-        setNameParent(state, name){
-            state.nameParent = name;
+    mutations: {
+        setLocalNameParent(state, name) {
+            state.localName = name;
         },
-        setAgeParent(state, age){
-            state.ageParent = age;
+        setLocalAgeParent(state, age) {
+            state.localAge = age;
         },
-        addErrorParent(state, errorObj){
-            let errorArrayItem = state.Errors[errorObj.errorItem].filter( (item) => item == errorObj.errorValue);
-            if(errorArrayItem.length == 0)
-            state.Errors[errorObj.errorItem].push(errorObj.errorValue);
+        addToStorage(state) {
+            state.nameParent = state.localName;
+            state.ageParent = state.localAge;
         },
-        removeErrorParent(state, errorObj){
-            state.Errors[errorObj.errorItem] = state.Errors[errorObj.errorItem].filter( (item) => item !== errorObj.errorValue);
-        }
     },
-    actions:{
-        
+    actions: {
+
     },
     namespaced: true
 }
