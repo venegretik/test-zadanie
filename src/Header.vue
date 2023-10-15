@@ -2,10 +2,10 @@
     <header class="header">
         <img src="./assets/img/Logo.svg" alt="">
         <nav class="navigation__header">
-            <router-link :to="'/'">
+            <router-link :to="'/test-zadanie/'">
                 Форма
             </router-link>
-            <router-link :to="'/Preview'">
+            <router-link :to="'/test-zadanie/Preview'">
                 Превью
             </router-link>
         </nav>
