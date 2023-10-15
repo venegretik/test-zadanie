@@ -3,8 +3,8 @@
 export const formChildren = {
     state: () => ({
         LocalChildrenArray: [],
-        MainChildrenArray:[],
-        successAddedData:false
+        MainChildrenArray: [],
+        successAddedData: false
     }),
     getter: {
 
@@ -17,20 +17,46 @@ export const formChildren = {
             }
         },
         addNewChildren(state, itemObject) {
-            if(state.LocalChildrenArray.length < 5){
+            if (state.LocalChildrenArray.length < 5) {
                 state.LocalChildrenArray.push({
                     id: Date.now(),
                     ...itemObject
                 });
             }
         },
-        addToStorage(state){
+        addToStorage(state) {
             state.MainChildrenArray = state.LocalChildrenArray
+        },
+        checkValidValue(state) {
+            let errorsLocalChildrenArray = state.LocalChildrenArray.filter(el => !el.nameText || !el.ageText || el.nameText.length < 3 || el.ageText.length > 3);
+            
+            if (errorsLocalChildrenArray.length > 0) {
+                console.log(errorsLocalChildrenArray);
+                state.successAddedData = false;
+                state.LocalChildrenArray.forEach(el => {
+                    if (!el.nameText)
+                        el.errorNameText = "Заполните поля";
+                    if (!el.ageText)
+                        el.errorAgeText = "Заполните поля";
+                    if (el.nameText.length < 3)
+                        el.errorNameText = "Слишком короткое имя";
+                    if (el.ageText.length > 3)
+                        el.errorAgeText = "Неправильный возвраст";
+                });
+            }
+            else {
+                state.LocalChildrenArray.forEach(el => {
+                    if (el.nameText)
+                        el.errorNameText = "";
+                    if (el.ageText)
+                        el.errorNameText = "";
+                });
+            }
         },
         deleteChildren(state, itemObject) {
             state.LocalChildrenArray = state.LocalChildrenArray.filter((item) => item.id !== itemObject.id)
         },
-        setSuccessAddedData(state, data){
+        setSuccessAddedData(state, data) {
             state.successAddedData = data
         }
     },

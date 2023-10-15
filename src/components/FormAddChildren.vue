@@ -7,21 +7,26 @@
     </div>
     <form class="form__parent">
         <div class="input__row" v-for="item in LocalChildrenArray" :key="item">
-            <div class="input__item">
-                <label for="input_name">Имя</label>
-                <custom-input type="text" placeholder="Ваше Имя" @update:model-value="($event) => setName($event, item)"
-                    :modelValue="item.nameText" id="input_name" />
+            <div>
+                <div class="input__item">
+                    <label for="input_name">Имя</label>
+                    <custom-input type="text" placeholder="Ваше Имя" @update:model-value="($event) => setName($event, item)"
+                        :modelValue="item.nameText" id="input_name" />
+                </div>
+                <p class="error"> {{ item.errorNameText }} </p>
             </div>
-            <div class="input__item">
-                <label for="input_age">Возраст</label>
-                <custom-input type="number" id="input_age" placeholder="Ваш возраст"
-                    @update:model-value="($event) => setAge($event, item)" :modelValue="item.ageText"></custom-input>
+            <div>
+                <div class="input__item">
+                    <label for="input_age">Возраст</label>
+                    <custom-input type="number" id="input_age" placeholder="Ваш возраст"
+                        @update:model-value="($event) => setAge($event, item)" :modelValue="item.ageText"></custom-input>
+                </div>
+                <p class="error">{{ item.errorAgeText }}</p>
             </div>
             <p @click="deleteChildren(item)">Удалить</p>
         </div>
-        <custom-button type="button" v-if="LocalChildrenArray.length > 0" class="save__data" @click="() => {
-            clickAddStorage();
-            addToStorageParent();
+        <custom-button type="button" class="save__data" @click="() => {
+            clickButton()
         }">Сохранить</custom-button>
     </form>
 </template>
@@ -34,9 +39,25 @@ export default {
     },
     methods: {
         clickAddStorage() {
+            console.log("check");
+            this.setSuccessAddedData(true);
+            this.checkValidValue();
+            if (this.successAddedData) {
                 this.addToStorageChildren();
                 this.addToStorageParent();
-                this.setSuccessAddedData(true)
+            }
+        },
+        clickButton() {
+            if (!this.errorObject.errorLocalName && !this.errorObject.errorLocalAge && this.localName && this.localAge)
+                this.clickAddStorage();
+            else {
+                console.log("check");
+                this.checkValidValue();
+                if (!this.localName)
+                    this.setErrorLocalName("Поле не может быть пустым");
+                if (!this.localAge)
+                    this.setErrorLocalAge("Поле не может быть пустым");
+            }
         },
         setName(e, item) {
             item.nameText = e;
@@ -50,24 +71,31 @@ export default {
         },
         addNewChildrenClick() {
             this.addNewChildren({
-                nameText: '',
-                ageText: ''
+                nameText: "",
+                ageText: "",
+                errorNameText: "",
+                errorAgeText: ""
             });
         },
         ...mapMutations({
             setItemChildren: 'formChildren/setItemChildren',
             addNewChildren: 'formChildren/addNewChildren',
             deleteChildren: 'formChildren/deleteChildren',
+            setErrorLocalName: 'formParent/setErrorLocalName',
+            setErrorLocalAge: 'formParent/setErrorLocalAge',
             addToStorageChildren: 'formChildren/addToStorage',
             addToStorageParent: 'formParent/addToStorage',
+            checkValidValue: 'formChildren/checkValidValue',
             setSuccessAddedData: 'formChildren/setSuccessAddedData'
         }),
     },
     computed: {
         ...mapState({
             LocalChildrenArray: state => state.formChildren.LocalChildrenArray,
-            nameParent: state => state.formParent.nameParent,
-            ageParent: state => state.formParent.ageParent
+            localName: state => state.formParent.localName,
+            localAge: state => state.formParent.localAge,
+            successAddedData: state => state.formChildren.successAddedData,
+            errorObject: state => state.formParent.errorObject
         })
     }
 }
@@ -142,5 +170,13 @@ export default {
     border: 0px;
     border-radius: 100px;
     height: 44px;
+}
+
+.error {
+    color: red !important;
+    margin-left: 0px !important;
+    margin: 0px;
+    margin-top: 5px;
+    cursor: default !important;
 }
 </style>

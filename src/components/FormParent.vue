@@ -3,38 +3,43 @@
     <form action="" class="form__parent">
         <div class="input__item">
             <label for="input_name">Имя</label>
-            <custom-input type="text" id="input_name" @update:model-value="($event) => nameChange($event)" :modelValue="localName" placeholder="Ваше Имя"></custom-input>
+            <custom-input type="text" id="input_name" @update:model-value="($event) => nameChange($event)"
+                :modelValue="localName" placeholder="Ваше Имя"></custom-input>
         </div>
+        <p v-if="errorObject.errorLocalName" class="error">{{ errorObject.errorLocalName }}</p>
         <div class="input__item">
             <label for="input_name">Возраст</label>
-            <custom-input type="number" id="input_name" @update:model-value="($event) => ageChange($event)" :modelValue="localAge" placeholder="Ваш возраст"></custom-input>
+            <custom-input type="number" id="input_name" @update:model-value="($event) => ageChange($event)"
+                :modelValue="localAge" placeholder="Ваш возраст"></custom-input>
         </div>
+        <p v-if="errorObject.errorLocalAge" class="error">{{ errorObject.errorLocalAge }}</p>
     </form>
 </template>
 
 <script>
 import { mapState, mapMutations } from 'vuex';
 export default {
-    data(){
-        return{
+    data() {
+        return {
         }
     },
-    methods:{
-        nameChange(e){
+    methods: {
+        nameChange(e) {
             this.setLocalNameParent(e)
         },
-        ageChange(e){
+        ageChange(e) {
             this.setLocalAgeParent(e)
         },
         ...mapMutations({
-            setLocalNameParent:'formParent/setLocalNameParent',
-            setLocalAgeParent:'formParent/setLocalAgeParent'
+            setLocalNameParent: 'formParent/setLocalNameParent',
+            setLocalAgeParent: 'formParent/setLocalAgeParent'
         })
     },
-    computed:{
+    computed: {
         ...mapState({
             localName: state => state.formParent.localName,
-            localAge: state => state.formParent.localAge
+            localAge: state => state.formParent.localAge,
+            errorObject: state => state.formParent.errorObject
         })
     }
 }
@@ -64,8 +69,12 @@ export default {
     row-gap: 10px;
 }
 
-.input__item p{
+.input__item p {
     margin: 0px;
+    color: red;
+}
+
+.error {
     color: red;
 }
 </style>

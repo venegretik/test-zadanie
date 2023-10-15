@@ -1,7 +1,7 @@
 <template>
     <div class="previewContainer">
         <h3>Персональные данные</h3>
-        <b v-if="nameParent && ageParent">{{ nameParent }}, {{ ageParent }} лет</b>
+        <b v-if="nameParent && ageParent">{{ nameParent }}, {{ declinationsAge }}</b>
         <b class="errors" v-if="!nameParent || !ageParent">Заполните все поля!</b>
         <div class="children__preview">
             <p>Дети</p>
@@ -22,14 +22,23 @@
 import { mapState } from 'vuex';
 export default {
     methods: {
-
+        declacate(number, titles){
+            let cases = [2, 0, 1, 1, 1, 2];
+            return titles[(number % 100 > 4 && number % 100 < 20) ? 2 : cases[(number % 10 < 5) ? number % 10 : 5]];
+        }
     },
     computed: {
         ...mapState({
             nameParent: state => state.formParent.nameParent,
             ageParent: state => state.formParent.ageParent,
             MainChildrenArray: state => state.formChildren.MainChildrenArray
-        })
+        }),
+        declinationsAge() {
+            const count = this.ageParent;
+            const title = this.declacate(count, [' год', ' года', ' лет'])
+            const age = count + title
+            return age
+        }
     }
 }
 </script>
